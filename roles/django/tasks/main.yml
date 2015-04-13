@@ -1,0 +1,11 @@
+---
+- name: check if virtualenv already exists
+  stat: path={{ virtualenv_dir }}
+  register: venv_dir
+
+- name: create virtualenv for django web app
+  shell: virtualenv {{ virtualenv_dir }}
+  when: venv_dir.stat.isdir is not defined
+
+- name: Install project requirements
+  pip: virtualenv={{ virtualenv_dir }} requirements={{ project_path }}/requirements.txt executable={{ virtualenv_dir}}/bin/pip

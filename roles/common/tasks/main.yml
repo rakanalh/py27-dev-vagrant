@@ -1,0 +1,30 @@
+---
+- name: Install development tools
+  apt: pkg=build-essential state=latest update_cache=yes
+  sudo: yes
+
+- name: Install Servers & Libraries
+  apt: pkg={{ item }} state=latest
+  sudo: yes
+  with_items:
+    - vim
+    - postgresql-server-dev-all
+    - redis-server
+    - python-dev
+    - nginx
+    - python-pip
+    - python-imaging
+    - libffi-dev
+    - libxml2-dev
+    - libxslt1-dev
+
+
+- name: Install virtualenvwrapper
+  pip: name=virtualenvwrapper state=latest
+  sudo: yes
+
+- name: Add virtualenvwrapper to bashrc
+  lineinfile: dest=/home/vagrant/.bashrc state=present line='{{ item }}'
+  with_items:
+    - export WORKON_HOME=$HOME/.virtualenvs
+    - source /usr/local/bin/virtualenvwrapper.sh
